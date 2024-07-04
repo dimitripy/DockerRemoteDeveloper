@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  dev-container:
+    build: .
+    image: DockerRemoteDeveloper:latest
+    ports:
+      - "${SSH_PORT}:22"
+    env_file:
+      - config.env

@@ -1,4 +1,3 @@
-"""
 # DockerRemoteDeveloper
 A Docker Remote Developer for VS-Code
 
@@ -91,4 +90,3 @@ License
 This project is licensed under the MIT License. For more information, see the LICENSE file.
 
 With this guide, anyone should be able to configure and use the project effectively.
-

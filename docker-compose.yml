@@ -2,8 +2,12 @@ version: '3.8'
 
 services:
   dev-container:
-    build: .
-    image: DockerRemoteDeveloper:latest
+    build:
+      context: .
+      args:
+        SSH_USER: ${SSH_USER}
+        SSH_PASSWORD: ${SSH_PASSWORD}
+    image: dockerremotedeveloper:latest
     ports:
       - "${SSH_PORT}:22"
     env_file:

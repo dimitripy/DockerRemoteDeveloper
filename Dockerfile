@@ -1,6 +1,14 @@
 # Verwenden Sie das Debian-Image als Basis
 FROM mcr.microsoft.com/devcontainers/base:bookworm
 
+# Setzen Sie Build-Argumente
+ARG SSH_USER
+ARG SSH_PASSWORD
+
+# Setzen Sie Umgebungsvariablen
+ENV SSH_USER=${SSH_USER}
+ENV SSH_PASSWORD=${SSH_PASSWORD}
+
 # Installieren Sie Git
 RUN apt-get update \
     && apt-get install -y git
@@ -28,18 +36,39 @@ RUN apt-get update \
 # Erstellen Sie das Verzeichnis für den SSH-Daemon
 RUN mkdir /var/run/sshd
 
+# Generieren Sie SSH-Host-Schlüssel
+RUN ssh-keygen -A
+
+# Debugging: Zeigen Sie die generierten SSH-Schlüssel an
+
+RUN ls -l /etc/ssh/ssh_host_*
+
+
+
 # Setzen Sie die Shell auf bash
 SHELL ["/bin/bash", "-c"]
 
 # Setzen Sie das Arbeitsverzeichnis
 WORKDIR /home/vscode
 
-# Setzen Sie das Passwort und erlauben Sie root-Login über SSH
-RUN echo '$SSH_USER:$SSH_PASSWORD' | chpasswd
+# Erstellen Sie den Benutzer und setzen Sie das Passwort
+RUN echo '$SSH_USER:$SSH_PASSWORD' | envsubst | chpasswd
+#RUN useradd -m -s /bin/bash $SSH_USER && echo "$SSH_USER:$SSH_PASSWORD" | chpasswd
+# Erlauben Sie root-Login über SSH
 RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
+# Debugging: Zeigen Sie die SSH-Konfigurationsdatei an
+
+RUN cat /etc/ssh/sshd_config
+
+
+# Expose the SSH port
+EXPOSE 22
+
 # Starten Sie den SSH-Daemon und halten Sie den Container aktiv
-CMD /usr/sbin/sshd -D && tail -f /dev/null
+#CMD ["/usr/sbin/sshd", "-D"]
+CMD ["/bin/bash", "-c", "ls -l /etc/ssh/ssh_host_* && /usr/sbin/sshd -D"]
+
 
 # Setzen Sie den Benutzer (entfernen oder kommentieren Sie diese Zeile, um als root zu arbeiten)
-USER vscode
+#USER vscode

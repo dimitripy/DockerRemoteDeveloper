@@ -16,9 +16,9 @@ cd remote_dev/
 ```
 ### 1. You have two options to get the Image:
 
-Option 1: Pull the Docker Image from Docker Hub (Comming Soon)
+Option 1: Pull the Docker Image from Docker Hub 
 ```sh
-docker pull docdietrich/DockerRemoteDeveloper:latest
+docker pull docdietrich/dockerremotedeveloper:latest
 ```
 Option 2: Clone the Git Repository and Build Locally
 ```sh
@@ -31,20 +31,30 @@ cd DockerRemoteDeveloper
 sudo nano -w config.env
 ```
 ```txt
-#config.env
-SSH_PORT=2222 # The port on which the SSH server listens
-SSH_USER=vscode # The username for SSH access
-SSH_PASSWORD=your_secure_password # The password for SSH access
+SSH_PORT=2222
+SSH_USER=vscode
+SSH_PASSWORD=your_secure_password
 ```
 Adjust the values according to your needs. This file will not be included in the Git repository.
 
 ### 3. Start the container using Docker Compose:
 ```sh
-docker-compose up
+sudo docker-compose up
+```
+wenn es nicht Funktioniert:
+```sh
+export SSH_PORT=2222
+export SSH_USER=vscode
+export SSH_PASSWORD=abcd
+docker-compose up --build
 ```
 To allow the container to access your home directory for project management:
 ```sh
 sudo docker run -d -p 2222:22 --name remote-dev -v ~/:/home/vscode docdietrich/DockerRemoteDeveloper:latest
+```
+or
+```sh
+sudo docker run -d -p 2222:22 --name remote-dev -v ~/:/home/vscode dockerremotedeveloper:latest
 ```
 ### Connecting to the Container
 Replace <SSH_PORT>, <SSH_USER>, and <IP_ADDRESS> with the corresponding values from your config.env file and the IP address of the server running the container.

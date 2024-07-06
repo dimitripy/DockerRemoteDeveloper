@@ -50,7 +50,7 @@ docker-compose up --build
 ```
 To allow the container to access your home directory for project management:
 ```sh
-sudo docker run -d -p 2222:22 --name remote-dev -v ~/:/home/vscode docdietrich/DockerRemoteDeveloper:latest
+sudo docker run -d -p 2222:22 --name remote-dev -v ~/:/home/vscode docdietrich/dockerremotedeveloper:latest
 ```
 or
 ```sh
